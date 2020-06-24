@@ -1,16 +1,6 @@
-# actions-docker
+# actions-docker-gcr
 
-Opinionated GitHub Actions for common Docker workflows
-
-Fork from https://github.com/urcomputeringpal/actions-docker
-
-## Opinions (expressed via default environment variables)
-
-- [`REGISTRY=gcr.io`](https://gcr.io)
-- `IMAGE=$GITHUB_REPOSITORY`
-  - (Expects a Google Cloud Project named after your GitHub username)
-- `TAG=$GITHUB_SHA`
-- `DEFAULT_BRANCH_TAG=true`
+GitHub Actions for common Docker workflows (Forked from https://github.com/urcomputeringpal/actions-docker)
 
 ## Usage
 
@@ -49,12 +39,12 @@ jobs:
       - uses: actions/checkout@v1
 
       - name: Docker Build
-        uses: benjlevesque/actions-docker-gcr/build@master
+        uses: benjlevesque/actions-docker-gcr/build@v1.1
 
       - name: Docker Push
-        uses: benjlevesque/actions-docker-gcr/push@master
-        env:
-          GCLOUD_SERVICE_ACCOUNT_KEY: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}
+        uses: benjlevesque/actions-docker-gcr/push@v1.1
+        with:
+          gcloud_key: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}
 ```
 
 ### Specify a different Registry, Project & image name
@@ -65,15 +55,37 @@ jobs:
       - uses: actions/checkout@v1
 
       - name: Docker Build
-        uses: benjlevesque/actions-docker-gcr/build@master
-        env:
-          IMAGE: my-project/my-image
-          GCLOUD_REGISTRY: eu.gcr.io
+        uses: benjlevesque/actions-docker-gcr/build@v1.1
+        with:
+          image: my-project/my-image
+          registry: eu.gcr.io
 
       - name: Docker Push
-        uses: benjlevesque/actions-docker-gcr/push@master
-        env:
-          IMAGE: my-project/my-image
-          GCLOUD_REGISTRY: eu.gcr.io
-          GCLOUD_SERVICE_ACCOUNT_KEY: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}
+        uses: benjlevesque/actions-docker-gcr/push@v1.1
+        with:
+          image: my-project/my-image
+          registry: eu.gcr.io
+          gcloud_key: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}
 ```
+
+## Parameters
+
+### Build
+
+| parameter | description                       | required | default              |
+| --------- | --------------------------------- | -------- | -------------------- |
+| registry  | The registry to upload to.        | false    | gcr.io               |
+| image     | The name of image to build.       | false    | `$GITHUB_REPOSITORY` |
+| tag       | The tag of the image.             | false    | `$GITHUB_SHA`        |
+| latest    | If true, will also add latest tag | true     | `true`               |
+| args      | Additional args for docker        | false    |                      |
+
+### Push
+
+| parameter  | description                                                                      | required | default              |
+| ---------- | -------------------------------------------------------------------------------- | -------- | -------------------- |
+| registry   | The registry to upload to.                                                       | false    | gcr.io               |
+| image      | The name of image to build.                                                      | false    | `$GITHUB_REPOSITORY` |
+| tag        | The tag of the image.                                                            | false    | `$GITHUB_SHA`        |
+| latest     | If true, will also add latest tag                                                | true     | `true`               |
+| gcloud_key | A GCloud service account json key, base64 encoded. Should be stored in a secret! | true     |

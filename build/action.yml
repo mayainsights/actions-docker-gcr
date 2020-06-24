@@ -1,0 +1,27 @@
+name: actions-docker-gcr/build
+description: Build a docker image
+author: benjlevesque
+branding:
+  icon: anchor
+  color: blue
+inputs:
+  registry:      
+    description: The registry to upload to. Defaults to gcr.io
+    required: false
+  image:
+    description: The name of image to build. Defaults to repository name
+    required: false
+  args:
+    description: Additional args for docker
+    required: false
+  tag:
+    description: The tag of the image. Defaults to the commit SHA
+    required: false
+  latest:
+    description: If true, will also add latest tag
+    required: true
+    default: "true"
+
+runs: 
+  using: 'docker'
+  image: 'Dockerfile'

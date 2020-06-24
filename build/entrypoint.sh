@@ -2,23 +2,15 @@
 
 set -e
 
-: ${GCLOUD_REGISTRY:=gcr.io}
-: ${IMAGE:=$GITHUB_REPOSITORY}
-: ${ARGS:=} # Default: empty build args
-: ${TAG:=$GITHUB_SHA}
-: ${DEFAULT_BRANCH_TAG:=true}
-: ${LATEST:=true}
+: ${INPUT_REGISTRY:=gcr.io}
+: ${INPUT_IMAGE:=$GITHUB_REPOSITORY}
+: ${INPUT_ARGS:=} # Default: empty build args
+: ${INPUT_TAG:=$GITHUB_SHA}
+: ${INPUT_LATEST:=true}
 
-docker build $ARGS -t $IMAGE:$TAG .
-docker tag $IMAGE:$TAG $GCLOUD_REGISTRY/$IMAGE:$TAG
+docker build $INPUT_ARGS -t $INPUT_IMAGE:$INPUT_TAG .
+docker tag $INPUT_IMAGE:$INPUT_TAG $INPUT_REGISTRY/$INPUT_IMAGE:$INPUT_TAG
 
-if [ $LATEST = true ]; then
-  docker tag $IMAGE:$TAG $GCLOUD_REGISTRY/$IMAGE:latest
-fi
-
-if [ "$DEFAULT_BRANCH_TAG" = "true" ]; then
-  BRANCH=$(echo $GITHUB_REF | rev | cut -f 1 -d / | rev)
-  if [ "$BRANCH" = "master" ]; then # TODO
-    docker tag $IMAGE:$TAG $GCLOUD_REGISTRY/$IMAGE:$BRANCH
-  fi
+if [ $INPUT_LATEST = true ]; then
+  docker tag $INPUT_IMAGE:$INPUT_TAG $INPUT_REGISTRY/$INPUT_IMAGE:latest
 fi
