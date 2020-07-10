@@ -7,8 +7,10 @@ set -e
 : ${INPUT_ARGS:=} # Default: empty build args
 : ${INPUT_TAG:=$GITHUB_SHA}
 : ${INPUT_LATEST:=true}
+: ${INPUT_PATH:=.}
 
-docker build $INPUT_ARGS -t $INPUT_IMAGE:$INPUT_TAG .
+
+docker build $INPUT_ARGS -t $INPUT_IMAGE:$INPUT_TAG $INPUT_PATH
 docker tag $INPUT_IMAGE:$INPUT_TAG $INPUT_REGISTRY/$INPUT_IMAGE:$INPUT_TAG
 
 if [ $INPUT_LATEST = true ]; then

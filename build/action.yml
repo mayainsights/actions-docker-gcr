@@ -21,6 +21,10 @@ inputs:
     description: If true, will also add latest tag
     required: true
     default: "true"
+  path: 
+    description: the context path
+    required: true
+    default: "."
 
 runs: 
   using: 'docker'
