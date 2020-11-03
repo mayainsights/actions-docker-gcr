@@ -7,9 +7,9 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build
         uses: ./build/
-        working-directory: ./test
         with:
           image: docker-gcr-test
+          args: "--workdir ./test"
       - name: Push
         uses: ./push/
         with:
