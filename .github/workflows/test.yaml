@@ -6,10 +6,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build
-        uses: ./build/
+        uses: benjlevesque/actions-docker-gcr/build@${{GITHUB_SHA}}
         with:
           image: docker-gcr-test
-          args: "--workdir ./test"
+          path: ./test
+          project: ${{ secrets.GCP_PROJECT }}
       - name: Push
         uses: ./push/
         with:
