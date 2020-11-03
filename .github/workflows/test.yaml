@@ -9,6 +9,7 @@ jobs:
         uses: ./build/
         with:
           image: docker-gcr-test
+          path: ./test
       - name: Push
         uses: ./push/
         with:
