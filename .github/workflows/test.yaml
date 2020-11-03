@@ -6,7 +6,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build
-        uses: benjlevesque/actions-docker-gcr/build@{{ $GITHUB_SHA }}
+        uses: benjlevesque/actions-docker-gcr/build@$GITHUB_SHA
         with:
           image: docker-gcr-test
           path: ./test
