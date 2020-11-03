@@ -4,12 +4,13 @@ jobs:
   test: 
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v1
       - name: Build
-        uses: ../build/
+        uses: ./build/
         with:
           image: docker-gcr-test
       - name: Push
-        uses: ../push/
+        uses: ./push/
         with:
           image: docker-gcr-test
           gcloud_key:  ${{ secrets.GCR_AUTH }}
