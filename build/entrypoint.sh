@@ -11,6 +11,15 @@ set -x
 : ${INPUT_PATH:=.}
 : ${INPUT_DOCKERFILE:=Dockerfile}
 
+if [ -n "${INPUT_GCLOUD_KEY}" ]; then
+  echo "Logging into gcr.io with INPUT_GCLOUD_KEY..."
+  echo ${INPUT_GCLOUD_KEY} | base64 --decode --ignore-garbage > /tmp/key.json
+  gcloud auth activate-service-account --quiet --key-file /tmp/key.json
+  gcloud auth configure-docker --quiet
+else
+  echo "INPUT_GCLOUD_KEY was empty, not performing auth" 1>&2
+fi
+
 docker pull $INPUT_REGISTRY/$INPUT_IMAGE:latest
 
 docker build $INPUT_ARGS -f $INPUT_DOCKERFILE -t $INPUT_IMAGE:$INPUT_TAG $INPUT_PATH --cache-from $INPUT_REGISTRY/$INPUT_IMAGE:latest
