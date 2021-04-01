@@ -20,7 +20,7 @@ else
   echo "INPUT_GCLOUD_KEY was empty, not performing auth" 1>&2
 fi
 
-docker pull $INPUT_REGISTRY/$INPUT_IMAGE:latest
+docker pull $INPUT_REGISTRY/$INPUT_IMAGE:$INPUT_TAG
 
 docker build $INPUT_ARGS -f $INPUT_DOCKERFILE -t $INPUT_IMAGE:$INPUT_TAG $INPUT_PATH --cache-from $INPUT_REGISTRY/$INPUT_IMAGE:latest
 docker tag $INPUT_IMAGE:$INPUT_TAG $INPUT_REGISTRY/$INPUT_IMAGE:$INPUT_TAG
